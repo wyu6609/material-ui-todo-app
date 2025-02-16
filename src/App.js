@@ -75,13 +75,13 @@ const App = () => {
           <Typography variant="h5" align="center" gutterBottom>
             Todo items
           </Typography>
+          <IconButton onClick={() => setIsSearchVisible(!isSearchVisible)}>
+            <SearchIcon />
+          </IconButton>
         </Box>
 
         {/* Filter Toggles */}
         <Box display="flex" justifyContent="center" marginBottom="1rem">
-          <IconButton onClick={() => setIsSearchVisible(!isSearchVisible)}>
-            <SearchIcon />
-          </IconButton>
           <ButtonGroup variant="contained">
             <Button
               onClick={() => setFilterStatus("all")}
