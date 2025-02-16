@@ -1,24 +1,62 @@
 import { useState, useEffect } from "react";
 
 const useTodo = () => {
-  const [todos, setTodos] = useState([]);
-  const [input, setInput] = useState("");
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [editText, setEditText] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  // Load initial state from local storage or use defaults
+  const loadState = (key, defaultValue) => {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : defaultValue;
+  };
 
-  // Load todos from local storage on component mount
-  useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
-    setTodos(storedTodos);
-  }, []);
+  // Save state to local storage
+  const saveState = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+
+  // State for todos
+  const [todos, setTodos] = useState(() => loadState("todos", []));
+
+  // State for input
+  const [input, setInput] = useState(() => loadState("input", ""));
+
+  // State for editing
+  const [editingIndex, setEditingIndex] = useState(() =>
+    loadState("editingIndex", null)
+  );
+  const [editText, setEditText] = useState(() => loadState("editText", ""));
+
+  // State for Snackbar
+  const [snackbarOpen, setSnackbarOpen] = useState(() =>
+    loadState("snackbarOpen", false)
+  );
+  const [snackbarMessage, setSnackbarMessage] = useState(() =>
+    loadState("snackbarMessage", "")
+  );
+  const [snackbarSeverity, setSnackbarSeverity] = useState(() =>
+    loadState("snackbarSeverity", "success")
+  );
 
   // Save todos to local storage whenever they change
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
+    saveState("todos", todos);
   }, [todos]);
+
+  // Save input to local storage whenever it changes
+  useEffect(() => {
+    saveState("input", input);
+  }, [input]);
+
+  // Save editing state to local storage whenever it changes
+  useEffect(() => {
+    saveState("editingIndex", editingIndex);
+    saveState("editText", editText);
+  }, [editingIndex, editText]);
+
+  // Save Snackbar state to local storage whenever it changes
+  useEffect(() => {
+    saveState("snackbarOpen", snackbarOpen);
+    saveState("snackbarMessage", snackbarMessage);
+    saveState("snackbarSeverity", snackbarSeverity);
+  }, [snackbarOpen, snackbarMessage, snackbarSeverity]);
 
   // Show Snackbar notification
   const showSnackbar = (message, severity) => {
@@ -27,10 +65,15 @@ const useTodo = () => {
     setSnackbarOpen(true);
   };
 
-  // Add a new todo
+  // Add a new todo with a timestamp
   const addTodo = () => {
     if (input.trim()) {
-      setTodos([...todos, { text: input, completed: false }]);
+      const newTodo = {
+        text: input,
+        completed: false,
+        createdAt: new Date().toLocaleString(), // Store creation timestamp
+      };
+      setTodos([...todos, newTodo]);
       setInput("");
       showSnackbar("Task added successfully!", "success");
     } else {

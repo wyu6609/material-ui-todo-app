@@ -5,6 +5,7 @@ import {
   Checkbox,
   IconButton,
   TextField,
+  Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -43,16 +44,20 @@ const TodoItem = ({
           </IconButton>
         </>
       ) : (
-        // View mode: Show todo text and edit/delete buttons
+        // View mode: Show todo text, timestamp, and edit/delete buttons
         <>
           <ListItemText
+            primary={todo.text}
+            secondary={
+              <Typography variant="caption" color="textSecondary">
+                {todo.createdAt}
+              </Typography>
+            }
             style={{
               textDecoration: todo.completed ? "line-through" : "none",
               color: todo.completed ? "gray" : "inherit",
             }}
-          >
-            {todo.text}
-          </ListItemText>
+          />
           <IconButton
             edge="end"
             onClick={() => onStartEditing(index, todo.text)}
