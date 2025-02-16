@@ -18,9 +18,19 @@
 git clone git@github.com:wyu6609/todo.git
 ```
 
-2. cd todo-app
-3. npm install
-4. npm start
+2. Navigate to the project folder:
+
+3. Install dependencies:
+
+```sh
+ npm install
+```
+
+4. Start the application:
+
+```sh
+npm start
+```
 
 ## DEMO
 
