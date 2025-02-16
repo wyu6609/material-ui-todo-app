@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const TodoItem = ({
   todo,
@@ -29,6 +30,15 @@ const TodoItem = ({
   onEditTextChange,
 }) => {
   const [showDetails, setShowDetails] = useState(false); // State to toggle details visibility
+
+  const isEditing = editingIndex === index;
+
+  // Handle Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      onSaveEdit(index);
+    }
+  };
 
   return (
     <ListItem
@@ -57,27 +67,63 @@ const TodoItem = ({
             onChange={() => onToggleComplete(index)}
             sx={{ marginRight: "0.5rem" }}
           />
-          <ListItemText
-            primary={todo.text}
-            sx={{
-              textDecoration: todo.completed ? "line-through" : "none",
-              color: todo.completed ? "gray" : "inherit",
-            }}
-          />
+          {isEditing ? (
+            <TextField
+              fullWidth
+              value={editText}
+              onChange={(e) => onEditTextChange(e.target.value)}
+              onKeyDown={handleKeyDown} // Add keydown event handler
+              sx={{ marginRight: "0.5rem" }}
+              autoFocus // Automatically focus the input when editing starts
+            />
+          ) : (
+            <ListItemText
+              primary={todo.text}
+              sx={{
+                textDecoration: todo.completed ? "line-through" : "none",
+                color: todo.completed ? "gray" : "inherit",
+              }}
+            />
+          )}
         </Box>
 
-        {/* Edit and Delete Icons */}
+        {/* Edit, Save, and Delete Icons */}
         <Box>
-          <IconButton
-            edge="end"
-            onClick={() => onStartEditing(index, todo.text)}
-            size="small"
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton edge="end" onClick={() => onDelete(index)} size="small">
-            <DeleteIcon />
-          </IconButton>
+          {isEditing ? (
+            <>
+              <IconButton
+                edge="end"
+                onClick={() => onSaveEdit(index)}
+                size="small"
+              >
+                <SaveIcon />
+              </IconButton>
+              <IconButton
+                edge="end"
+                onClick={() => onStartEditing(null)} // Cancel edit
+                size="small"
+              >
+                <CancelIcon />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <IconButton
+                edge="end"
+                onClick={() => onStartEditing(index, todo.text)}
+                size="small"
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                edge="end"
+                onClick={() => onDelete(index)}
+                size="small"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </>
+          )}
         </Box>
       </Box>
 
