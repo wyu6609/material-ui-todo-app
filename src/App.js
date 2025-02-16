@@ -83,21 +83,6 @@ const App = () => {
           </IconButton>
         </Box>
 
-        {/* Search Bar */}
-        {isSearchVisible && (
-          <Box marginBottom="0.5rem">
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Search tasks..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              size="small" // Smaller text field
-              style={{ marginBottom: "0.5rem" }} // Reduced margin
-            />
-          </Box>
-        )}
-
         {/* Filter Toggles */}
         <Box display="flex" justifyContent="center" marginBottom="1rem">
           <ButtonGroup variant="contained">
@@ -132,7 +117,20 @@ const App = () => {
 
         {/* Add Todo Component */}
         <AddTodo input={input} onInputChange={setInput} onAddTodo={addTodo} />
-
+        {/* Search Bar */}
+        {isSearchVisible && (
+          <Box marginBottom="0.5rem">
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search tasks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              size="small" // Smaller text field
+              style={{ marginBottom: "0.5rem" }} // Reduced margin
+            />
+          </Box>
+        )}
         {/* Todo List Component */}
         <TodoList
           todos={currentTodos}
