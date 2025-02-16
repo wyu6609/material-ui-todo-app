@@ -1,11 +1,12 @@
 import React from "react";
 import {
+  Typography,
   ListItem,
   ListItemText,
   Checkbox,
   IconButton,
   TextField,
-  Typography,
+  Chip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -44,19 +45,25 @@ const TodoItem = ({
           </IconButton>
         </>
       ) : (
-        // View mode: Show todo text, timestamp, and edit/delete buttons
+        // View mode: Show todo text, status indicator, and edit/delete buttons
         <>
           <ListItemText
             primary={todo.text}
             secondary={
               <Typography variant="caption" color="textSecondary">
-                {todo.createdAt}
+                Added: {todo.createdAt}
               </Typography>
             }
             style={{
               textDecoration: todo.completed ? "line-through" : "none",
               color: todo.completed ? "gray" : "inherit",
             }}
+          />
+          <Chip
+            label={todo.completed ? "Completed" : "In Progress"}
+            color={todo.completed ? "success" : "primary"}
+            size="small"
+            style={{ marginRight: "0.5rem" }}
           />
           <IconButton
             edge="end"

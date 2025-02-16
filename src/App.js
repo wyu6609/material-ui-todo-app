@@ -6,6 +6,9 @@ import {
   Pagination,
   IconButton,
   TextField,
+  ButtonGroup,
+  Button,
+  Chip,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TodoList from "./components/TodoList/TodoList";
@@ -26,10 +29,12 @@ const App = () => {
     itemsPerPage,
     currentTodos,
     searchQuery,
+    filterStatus,
     setInput,
     setEditText,
     setSnackbarOpen,
     setSearchQuery,
+    setFilterStatus,
     addTodo,
     toggleTodo,
     deleteTodo,
@@ -50,14 +55,14 @@ const App = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      minHeight="100vh"
       bgcolor="#f5f5f5"
       padding="1rem"
+      minHeight="100vh"
     >
       <Container
         maxWidth="sm"
         style={{
-          margin: "auto",
+          margin: "0 auto",
           padding: "2rem",
           maxWidth: "600px",
           backgroundColor: "#ffffff",
@@ -75,6 +80,32 @@ const App = () => {
           </IconButton>
         </Box>
 
+        {/* Filter Toggles */}
+        <Box display="flex" justifyContent="center" marginBottom="1rem">
+          <ButtonGroup variant="contained">
+            <Button
+              onClick={() => setFilterStatus("all")}
+              color={filterStatus === "all" ? "primary" : "inherit"}
+            >
+              All
+            </Button>
+            <Button
+              onClick={() => setFilterStatus("in-progress")}
+              color={filterStatus === "in-progress" ? "primary" : "inherit"}
+            >
+              In Progress
+            </Button>
+            <Button
+              onClick={() => setFilterStatus("completed")}
+              color={filterStatus === "completed" ? "primary" : "inherit"}
+            >
+              Completed
+            </Button>
+          </ButtonGroup>
+        </Box>
+
+        {/* Add Todo Component */}
+        <AddTodo input={input} onInputChange={setInput} onAddTodo={addTodo} />
         {/* Search Bar */}
         {isSearchVisible && (
           <TextField
@@ -86,10 +117,6 @@ const App = () => {
             style={{ marginBottom: "1rem" }}
           />
         )}
-
-        {/* Add Todo Component */}
-        <AddTodo input={input} onInputChange={setInput} onAddTodo={addTodo} />
-
         {/* Todo List Component */}
         <TodoList
           todos={currentTodos}

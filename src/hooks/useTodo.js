@@ -42,6 +42,9 @@ const useTodo = () => {
   // State for search
   const [searchQuery, setSearchQuery] = useState("");
 
+  // State for filter (all, in-progress, completed)
+  const [filterStatus, setFilterStatus] = useState("all"); // all, in-progress, completed
+
   // Save todos to local storage whenever they change
   useEffect(() => {
     saveState("todos", todos);
@@ -131,10 +134,16 @@ const useTodo = () => {
     }
   };
 
-  // Filter todos based on search query
-  const filteredTodos = todos.filter((todo) =>
-    todo.text.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter todos based on search query and filter status
+  const filteredTodos = todos
+    .filter((todo) =>
+      todo.text.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((todo) => {
+      if (filterStatus === "in-progress") return !todo.completed;
+      if (filterStatus === "completed") return todo.completed;
+      return true; // Show all tasks if filterStatus is "all"
+    });
 
   // Sort todos: incomplete tasks first (newest first), completed tasks last
   const sortedTodos = [...filteredTodos].sort((a, b) => {
@@ -163,10 +172,12 @@ const useTodo = () => {
     itemsPerPage,
     currentTodos,
     searchQuery,
+    filterStatus,
     setInput,
     setEditText,
     setSnackbarOpen,
     setSearchQuery,
+    setFilterStatus,
     addTodo,
     toggleTodo,
     deleteTodo,
