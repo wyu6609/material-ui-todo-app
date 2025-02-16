@@ -20,6 +20,10 @@ git clone git@github.com:wyu6609/todo.git
 
 2. Navigate to the project folder:
 
+```sh
+cd todo
+```
+
 3. Install dependencies:
 
 ```sh
