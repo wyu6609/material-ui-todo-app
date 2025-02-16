@@ -39,6 +39,9 @@ const useTodo = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Number of items per page
 
+  // State for search
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Save todos to local storage whenever they change
   useEffect(() => {
     saveState("todos", todos);
@@ -120,10 +123,15 @@ const useTodo = () => {
     }
   };
 
+  // Filter todos based on search query
+  const filteredTodos = todos.filter((todo) =>
+    todo.text.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTodos = todos.slice(indexOfFirstItem, indexOfLastItem);
+  const currentTodos = filteredTodos.slice(indexOfFirstItem, indexOfLastItem);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -139,15 +147,18 @@ const useTodo = () => {
     currentPage,
     itemsPerPage,
     currentTodos,
+    searchQuery,
     setInput,
     setEditText,
     setSnackbarOpen,
+    setSearchQuery,
     addTodo,
     toggleTodo,
     deleteTodo,
     startEditing,
     saveEdit,
     paginate,
+    filteredTodos,
   };
 };
 

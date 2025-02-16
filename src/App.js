@@ -1,5 +1,13 @@
-import React from "react";
-import { Container, Typography, Box, Pagination } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  Box,
+  Pagination,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import TodoList from "./components/TodoList/TodoList";
 import AddTodo from "./components/AddTodo/AddTodo";
 import CustomSnackbar from "./components/Snackbar/Snackbar";
@@ -17,24 +25,30 @@ const App = () => {
     currentPage,
     itemsPerPage,
     currentTodos,
+    searchQuery,
     setInput,
     setEditText,
     setSnackbarOpen,
+    setSearchQuery,
     addTodo,
     toggleTodo,
     deleteTodo,
     startEditing,
     saveEdit,
     paginate,
+    filteredTodos,
   } = useTodo();
 
-  // Calculate total number of pages
-  const totalPages = Math.ceil(todos.length / itemsPerPage);
+  // State to control search bar visibility
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
+  // Calculate total number of pages based on filtered todos
+  const totalPages = Math.ceil(filteredTodos.length / itemsPerPage);
 
   return (
     <Box
       display="flex"
-      justifyContent="center"
+      flexDirection="column"
       alignItems="center"
       minHeight="100vh"
       bgcolor="#f5f5f5"
@@ -51,9 +65,27 @@ const App = () => {
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <Typography variant="h4" align="center" gutterBottom>
-          To-Do App
-        </Typography>
+        {/* Header and Search Icon */}
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="h4" align="center" gutterBottom>
+            To-Do App
+          </Typography>
+          <IconButton onClick={() => setIsSearchVisible(!isSearchVisible)}>
+            <SearchIcon />
+          </IconButton>
+        </Box>
+
+        {/* Search Bar */}
+        {isSearchVisible && (
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ marginBottom: "1rem" }}
+          />
+        )}
 
         {/* Add Todo Component */}
         <AddTodo input={input} onInputChange={setInput} onAddTodo={addTodo} />
@@ -79,15 +111,15 @@ const App = () => {
             color="primary"
           />
         </Box>
-
-        {/* Snackbar Component */}
-        <CustomSnackbar
-          open={snackbarOpen}
-          message={snackbarMessage}
-          severity={snackbarSeverity}
-          onClose={() => setSnackbarOpen(false)}
-        />
       </Container>
+
+      {/* Snackbar Component */}
+      <CustomSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        onClose={() => setSnackbarOpen(false)}
+      />
     </Box>
   );
 };
