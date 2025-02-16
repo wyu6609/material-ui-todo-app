@@ -1,6 +1,6 @@
 # To-Do App
 
-[Simple Todo app](https://wyu6809.github.io/todo), built with React.js and Material-UI.
+[Simple Todo app](https://wyu6809.github.io/todo): built with React.js and Material-UI.
 
 ## Features
 

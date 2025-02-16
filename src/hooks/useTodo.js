@@ -80,7 +80,7 @@ const useTodo = () => {
         completed: false,
         createdAt: new Date().toLocaleString(), // Store creation timestamp
       };
-      setTodos([...todos, newTodo]);
+      setTodos([newTodo, ...todos]); // Add new items to the top of the list
       setInput("");
       showSnackbar("Task added successfully!", "success");
     } else {
@@ -88,10 +88,18 @@ const useTodo = () => {
     }
   };
 
-  // Toggle todo completion status
+  // Toggle todo completion status and move completed tasks to the end
   const toggleTodo = (index) => {
     const newTodos = [...todos];
-    newTodos[index].completed = !newTodos[index].completed;
+    const todo = newTodos[index];
+    todo.completed = !todo.completed;
+
+    // Move the completed task to the end of the list
+    if (todo.completed) {
+      newTodos.splice(index, 1); // Remove the task from its current position
+      newTodos.push(todo); // Add it to the end of the list
+    }
+
     setTodos(newTodos);
     showSnackbar("Task status updated!", "info");
   };
@@ -128,10 +136,17 @@ const useTodo = () => {
     todo.text.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Sort todos: incomplete tasks first (newest first), completed tasks last
+  const sortedTodos = [...filteredTodos].sort((a, b) => {
+    if (a.completed && !b.completed) return 1; // Completed tasks go to the bottom
+    if (!a.completed && b.completed) return -1; // Incomplete tasks stay at the top
+    return new Date(b.createdAt) - new Date(a.createdAt); // Newest incomplete tasks first
+  });
+
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTodos = filteredTodos.slice(indexOfFirstItem, indexOfLastItem);
+  const currentTodos = sortedTodos.slice(indexOfFirstItem, indexOfLastItem);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);

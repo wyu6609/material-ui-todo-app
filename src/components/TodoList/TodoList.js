@@ -15,7 +15,14 @@ const TodoList = ({
   return (
     <List>
       {todos.map((todo, index) => (
-        <Card key={index} style={{ marginBottom: "0.5rem" }}>
+        <Card
+          key={index}
+          style={{
+            marginBottom: "0.5rem",
+            backgroundColor: todo.completed ? "#f5f5f5" : "#ffffff", // Grey background for completed tasks
+            opacity: todo.completed ? 0.7 : 1, // Reduce opacity for completed tasks
+          }}
+        >
           <CardContent>
             <TodoItem
               todo={todo}
