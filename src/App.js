@@ -8,7 +8,6 @@ import {
   TextField,
   ButtonGroup,
   Button,
-  Chip,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TodoList from "./components/TodoList/TodoList";
@@ -50,6 +49,10 @@ const App = () => {
   // Calculate total number of pages based on filtered todos
   const totalPages = Math.ceil(filteredTodos.length / itemsPerPage);
 
+  // Count the number of in-progress and completed tasks
+  const inProgressCount = todos.filter((todo) => !todo.completed).length;
+  const completedCount = todos.filter((todo) => todo.completed).length;
+
   return (
     <Box
       display="flex"
@@ -72,13 +75,28 @@ const App = () => {
       >
         {/* Header and Search Icon */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h5" align="center" gutterBottom>
-            Todo items
+          <Typography variant="h4" align="center" gutterBottom>
+            To-Do App
           </Typography>
           <IconButton onClick={() => setIsSearchVisible(!isSearchVisible)}>
             <SearchIcon />
           </IconButton>
         </Box>
+
+        {/* Search Bar */}
+        {isSearchVisible && (
+          <Box marginBottom="0.5rem">
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search tasks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              size="small" // Smaller text field
+              style={{ marginBottom: "0.5rem" }} // Reduced margin
+            />
+          </Box>
+        )}
 
         {/* Filter Toggles */}
         <Box display="flex" justifyContent="center" marginBottom="1rem">
@@ -92,12 +110,20 @@ const App = () => {
             <Button
               onClick={() => setFilterStatus("in-progress")}
               color={filterStatus === "in-progress" ? "primary" : "inherit"}
+              disabled={inProgressCount === 0} // Disable if no in-progress tasks
+              sx={{
+                opacity: inProgressCount === 0 ? 0.5 : 1, // Grey out if no in-progress tasks
+              }}
             >
               In Progress
             </Button>
             <Button
               onClick={() => setFilterStatus("completed")}
               color={filterStatus === "completed" ? "primary" : "inherit"}
+              disabled={completedCount === 0} // Disable if no completed tasks
+              sx={{
+                opacity: completedCount === 0 ? 0.5 : 1, // Grey out if no completed tasks
+              }}
             >
               Completed
             </Button>
@@ -106,17 +132,6 @@ const App = () => {
 
         {/* Add Todo Component */}
         <AddTodo input={input} onInputChange={setInput} onAddTodo={addTodo} />
-        {/* Search Bar */}
-        {isSearchVisible && (
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Search tasks..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ marginBottom: "1rem" }}
-          />
-        )}
 
         {/* Todo List Component */}
         <TodoList
