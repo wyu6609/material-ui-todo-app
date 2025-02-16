@@ -72,16 +72,16 @@ const App = () => {
       >
         {/* Header and Search Icon */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h4" align="center" gutterBottom>
-            To-Do App
+          <Typography variant="h5" align="center" gutterBottom>
+            Todo items
           </Typography>
-          <IconButton onClick={() => setIsSearchVisible(!isSearchVisible)}>
-            <SearchIcon />
-          </IconButton>
         </Box>
 
         {/* Filter Toggles */}
         <Box display="flex" justifyContent="center" marginBottom="1rem">
+          <IconButton onClick={() => setIsSearchVisible(!isSearchVisible)}>
+            <SearchIcon />
+          </IconButton>
           <ButtonGroup variant="contained">
             <Button
               onClick={() => setFilterStatus("all")}
@@ -117,6 +117,7 @@ const App = () => {
             style={{ marginBottom: "1rem" }}
           />
         )}
+
         {/* Todo List Component */}
         <TodoList
           todos={currentTodos}
