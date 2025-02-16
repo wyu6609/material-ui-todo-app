@@ -35,6 +35,10 @@ const useTodo = () => {
     loadState("snackbarSeverity", "success")
   );
 
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of items per page
+
   // Save todos to local storage whenever they change
   useEffect(() => {
     saveState("todos", todos);
@@ -116,6 +120,14 @@ const useTodo = () => {
     }
   };
 
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentTodos = todos.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return {
     todos,
     input,
@@ -124,6 +136,9 @@ const useTodo = () => {
     snackbarOpen,
     snackbarMessage,
     snackbarSeverity,
+    currentPage,
+    itemsPerPage,
+    currentTodos,
     setInput,
     setEditText,
     setSnackbarOpen,
@@ -132,6 +147,7 @@ const useTodo = () => {
     deleteTodo,
     startEditing,
     saveEdit,
+    paginate,
   };
 };
 
