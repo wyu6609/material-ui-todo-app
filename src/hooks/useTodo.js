@@ -82,6 +82,7 @@ const useTodo = () => {
         text: input,
         completed: false,
         createdAt: new Date().toLocaleString(), // Store creation timestamp
+        completedAt: null, // Initialize completion timestamp as null
       };
       setTodos([newTodo, ...todos]); // Add new items to the top of the list
       setInput("");
@@ -91,11 +92,18 @@ const useTodo = () => {
     }
   };
 
-  // Toggle todo completion status and move completed tasks to the end
+  // Toggle todo completion status and log completion time
   const toggleTodo = (index) => {
     const newTodos = [...todos];
     const todo = newTodos[index];
     todo.completed = !todo.completed;
+
+    // Log completion time if the task is being marked as completed
+    if (todo.completed) {
+      todo.completedAt = new Date().toLocaleString(); // Store completion timestamp
+    } else {
+      todo.completedAt = null; // Reset completion timestamp if task is unmarked
+    }
 
     // Move the completed task to the end of the list
     if (todo.completed) {

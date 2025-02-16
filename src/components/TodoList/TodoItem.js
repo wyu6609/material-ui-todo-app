@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Typography,
   ListItem,
   ListItemText,
   Checkbox,
   IconButton,
   TextField,
   Chip,
+  Typography,
+  Collapse,
+  Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const TodoItem = ({
   todo,
@@ -23,6 +27,8 @@ const TodoItem = ({
   onSaveEdit,
   onEditTextChange,
 }) => {
+  const [showDetails, setShowDetails] = useState(false); // State to toggle details visibility
+
   return (
     <ListItem dense>
       {/* Checkbox to toggle completion */}
@@ -50,9 +56,25 @@ const TodoItem = ({
           <ListItemText
             primary={todo.text}
             secondary={
-              <Typography variant="caption" color="textSecondary">
-                Added: {todo.createdAt}
-              </Typography>
+              <Collapse in={showDetails}>
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  sx={{ fontSize: "0.75rem" }} // Smaller font size
+                >
+                  Added: {todo.createdAt}
+                </Typography>
+                {todo.completed && (
+                  <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    sx={{ fontSize: "0.75rem" }} // Smaller font size
+                  >
+                    <br />
+                    Completed: {todo.completedAt}
+                  </Typography>
+                )}
+              </Collapse>
             }
             style={{
               textDecoration: todo.completed ? "line-through" : "none",
@@ -65,6 +87,13 @@ const TodoItem = ({
             size="small"
             style={{ marginRight: "0.5rem" }}
           />
+          <Button
+            size="small"
+            onClick={() => setShowDetails(!showDetails)}
+            endIcon={showDetails ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          >
+            Details
+          </Button>
           <IconButton
             edge="end"
             onClick={() => onStartEditing(index, todo.text)}
